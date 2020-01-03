@@ -8,6 +8,55 @@
 }
 #nav-bar{
   background-color: #003366;
-  color: white;
   overflow: hidden;
+}
+#nav-bar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.drop-down {
+  float: left;
+  overflow: hidden;
+}
+
+.drop-btn {
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+#navbar p:hover, .drop-down:hover .drop-btn {
+  background-color: red;
+}
+
+.options {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: auto;
+}
+
+.options p {
+  color: black;
+  padding: 12px 16px;
+  display: block;
+  text-align: center;
+}
+
+.options p:hover {
+  background-color: #ddd;
+}
+
+.drop-down:hover .options {
+  display: block;
 }
