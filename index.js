@@ -1,11 +1,13 @@
-var graph ={
+var graph = {
   "nodes": [
     {"id": "Myriel", "group": 1},
     {"id": "Napoleon", "group": 1},
-    {"id": "Testing", "group":2}],
+    {"id": "Testing", "group":3}
+  ],
 
   "links": [
-    {"source": "Napoleon", "target": "Myriel", "value": 1}]
+    {"source": "Napoleon", "target": "Myriel", "value": 1}
+  ]
 }
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
@@ -26,7 +28,7 @@ var node = svg.append("g")
   .selectAll("circle")
   .data(graph.nodes)
   .enter().append("circle")
-    .attr("r", 5)
+    .attr("r", 8)
     .attr("fill", function(d) { return color(d.group); })
     .call(d3.drag()
         .on("start", dragstarted)
@@ -39,6 +41,7 @@ simulation
     .on("tick", ticked);
 simulation.force("link")
     .links(graph.links);
+
 function ticked() {
   link
       .attr("x1", function(d) { return d.source.x; })
@@ -63,4 +66,9 @@ function dragended(d) {
   if (!d3.event.active) simulation.alphaTarget(0);
   d.fx = null;
   d.fy = null;
+}
+
+function addNode(){
+  var newNode = {'id':"Test", 'group':1};
+  graph.nodes.push(newNode)
 }
