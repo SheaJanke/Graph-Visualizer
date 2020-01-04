@@ -10,11 +10,20 @@
     <h1 id="title">Network Visualizer</h1>
     <div id="nav-bar">
         <div class="drop-down">
-            <button class="drop-btn" onclick="showOptions();">Mode: <i class="fa fa-caret-down"></i></button>
+            <h3 class="drop-btn">Mode: <i class="fa fa-caret-down"></i></h3>
             <div class="options">
-                <p onclick="alert('test');">Nodes</p>
-                <p>Links</p>
+                <p onclick="">Nodes</p>
+                <p onclick="">Links</p>
             </div>
+        </div>
+        <div class="drop-down">
+            <h3 class="drop-btn">Algorithm: <i class="fa fa-caret-down"></i></h3>
+            <div class="options">
+                <p onclick="">Depth First Search</p>
+            </div>
+        </div>
+        <div class="drop-down">
+            <button id="visualize-btn" onclick="alert('works');">VISUALIZE</button>
         </div>
     </div>
 </div>
