@@ -2,27 +2,43 @@ var graph = {
   "nodes": [
     {"id": "Myriel", "group": 1},
     {"id": "Napoleon", "group": 1},
+    {"id": "Testing", "group":5},
+    {"id": "Testing", "group":3},
+    {"id": "Testing", "group":3},
+    {"id": "Testing", "group":3},
+    {"id": "Testing", "group":3},
+    {"id": "Testing", "group":3},
+    {"id": "Testing", "group":3},
+    {"id": "Testing", "group":5},
+    {"id": "Testing", "group":3},
+    {"id": "Testing", "group":3},
+    {"id": "Testing", "group":3},
+    {"id": "Testing", "group":3},
+    {"id": "Testing", "group":3},
     {"id": "Testing", "group":3}
+    
   ],
 
   "links": [
-    {"source": "Napoleon", "target": "Myriel", "value": 1}
+    {"source": "Napoleon", "target": "Myriel"},
+    {"source": "Testing", "target": "Myriel"}
   ]
 }
 var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
+    width = +screen.width,
+    height = +screen.height;
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) { return d.id; }))
-    .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width / 2, height / 2));
+    .force("charge", d3.forceManyBody().strength(-60))
+    .force('x', d3.forceX(width/2).strength(0.1))
+    .force('y',d3.forceY(height/2).strength(0.1));
 var link = svg.append("g")
     .attr("class", "links")
   .selectAll("line")
   .data(graph.links)
   .enter().append("line")
-    .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
+    .attr("stroke-width", 3);
 var node = svg.append("g")
     .attr("class", "nodes")
   .selectAll("circle")
@@ -49,7 +65,14 @@ function ticked() {
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; });
   node
-      .attr("cx", function(d) { return d.x; })
+      .attr("cx", function(d) { 
+        if(d.x < 0){
+          return 0; 
+        }else if(d.x > screen.width){
+          return screen.width;
+        }
+        return d.x; 
+      })
       .attr("cy", function(d) { return d.y; });
 }
 
