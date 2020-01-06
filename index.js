@@ -25,8 +25,15 @@ var graph = {
   ]
 }
 var svg = d3.select("svg"),
-    width = +screen.width,
-    height = +screen.height;
+    width = +window.innerWidth,
+    height = +window.innerHeight;
+window.addEventListener('resize', function(){
+  width = this.window.innerWidth;
+  height = this.window.innerHeight;
+  simulation.force('x',d3.forceX(width/2).strength(0.1))
+  .force('y',d3.forceY(height/2).strength(0.1));
+  simulation.restart();
+})
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) { return d.id; }))
@@ -92,6 +99,28 @@ function dragended(d) {
 }
 
 function addNode(){
-  var newNode = {'id':"Test", 'group':1};
-  graph.nodes.push(newNode)
+  graph.nodes.push({'id':'Test', 'group':1});
+
+  node.data(graph.nodes)
+  .selectAll('circle')
+  .enter().append("circle")
+  .attr("r", 8)
+  .attr("fill", function(d) { return color(d.group); })
+  .attr("cx", function(d) { 
+    if(d.x < 0){
+      return 0; 
+    }else if(d.x > screen.width){
+      return screen.width;
+    }
+    return d.x; 
+  })
+  .attr("cy", function(d) { return d.y; })
+  .call(d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended));
+  node.append("title")
+    .text(function(d) { return d.id; });
+  simulation
+    .nodes(graph.nodes)
 }
