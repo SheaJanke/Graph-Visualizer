@@ -27,7 +27,9 @@ var graph = {
 var svg = d3.select("svg"),
     width = +window.innerWidth,
     height = +window.innerHeight;
-window.addEventListener('resize', function(){
+
+  //Changes the force location when the window is resized.
+  window.addEventListener('resize', function(){
   width = this.window.innerWidth;
   height = this.window.innerHeight;
   simulation.force('x',d3.forceX(width/2).strength(0.1))
@@ -98,31 +100,39 @@ function dragended(d) {
   d.fy = null;
 }
 
-function addNode(){
+function addNode(){ 
   graph.nodes.push({'id':'Test', 'group':1});
-
-  node.data(graph.nodes)
-  .selectAll('circle')
+  link
+  .data(graph.links)
+  .enter().append("line")
+    .attr("stroke-width", 3);
+  node
+  .data(graph.nodes)
   .enter().append("circle")
-  .attr("r", 8)
-  .attr("fill", function(d) { return color(d.group); })
-  .attr("cx", function(d) { 
-    if(d.x < 0){
-      return 0; 
-    }else if(d.x > screen.width){
-      return screen.width;
-    }
-    return d.x; 
-  })
-  .attr("cy", function(d) { return d.y; })
-  .call(d3.drag()
-      .on("start", dragstarted)
-      .on("drag", dragged)
-      .on("end", dragended));
-  node.append("title")
+    .attr("r", 8)
+    .attr("fill", function(d) { return color(d.group); })
+    .attr("cx", function(d) { 
+      if(d.x < 0){
+        return 0; 
+      }else if(d.x > screen.width){
+        return screen.width;
+      }
+      return d.x; 
+    })
+    .attr("cy", function(d) { return d.y; })
+    .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+    
+node.append("title")
     .text(function(d) { return d.id; });
-  simulation
+simulation
     .nodes(graph.nodes)
+    .on("tick", ticked);
+simulation.force("link")
+    .links(graph.links);
+simulation.alpha(1).restart();
 }
 
 function changeMode(clicked){
