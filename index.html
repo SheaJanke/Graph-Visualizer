@@ -10,27 +10,27 @@
     <h1 id="title">Network Visualizer</h1>
     <div id="nav-bar">
         <div class="drop-down">
-            <h3 class="drop-btn">Mode: <i class="fa fa-caret-down"></i></h3>
+            <h3 id = 'mode' class="drop-btn">Mode: <i class="fa fa-caret-down"></i></h3>
             <div class="options">
-                <p onclick="">Nodes</p>
-                <p onclick="">Links</p>
+                <p onclick="changeMode(this);">Add Nodes</p>
+                <p onclick="changeMode(this);">Add Links</p>
             </div>
         </div>
         <div class="drop-down">
-            <h3 class="drop-btn">Algorithm: <i class="fa fa-caret-down"></i></h3>
+            <h3 id="algorithm" class="drop-btn">Algorithm: <i class="fa fa-caret-down"></i></h3>
             <div class="options">
-                <p onclick="">Depth First Search</p>
+                <p onclick="changeAlgorithm(this);">Depth First Search</p>
             </div>
         </div>
         <div class="drop-down">
             <h3 class='drop-btn' onclick="addNode();">VISUALIZE</h3>
         </div>
         <div class="drop-down">
-            <h3 class="drop-btn">Speed: <i class="fa fa-caret-down"></i></h3>
+            <h3 id='speed' class="drop-btn">Speed: <i class="fa fa-caret-down"></i></h3>
             <div class="options">
-                <p onclick="">Fast</p>
-                <p onclick="">Medium</p>
-                <p onclick="">Slow</p>
+                <p onclick="changeSpeed(this);">Fast</p>
+                <p onclick="changeSpeed(this);">Medium</p>
+                <p onclick="changeSpeed(this);">Slow</p>
             </div>
         </div>
         <div class="drop-down">

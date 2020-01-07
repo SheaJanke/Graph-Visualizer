@@ -124,3 +124,15 @@ function addNode(){
   simulation
     .nodes(graph.nodes)
 }
+
+function changeMode(clicked){
+  document.getElementById('mode').innerHTML = clicked.innerHTML;
+}
+
+function changeAlgorithm(clicked){
+  document.getElementById('algorithm').innerHTML = clicked.innerHTML;
+}
+
+function changeSpeed(clicked){
+  document.getElementById('speed').innerHTML = clicked.innerHTML;
+}
