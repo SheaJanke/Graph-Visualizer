@@ -5,8 +5,12 @@
 }
 
 #network{
-  width: 100vw;
-  height: 85vh;
+  width: 65vw;
+  height: 83vh;
+  float: left;
+  background-color: #ddd;
+  outline: 0.5vw solid #87ceeb;
+  margin: 1vw;
 }
 
 #heading{

@@ -25,16 +25,20 @@ var graph = {
   ]
 }
 var svg = d3.select("svg"),
-    width = +window.innerWidth,
-    height = +window.innerHeight;
+    width = +(document.getElementById('network').getBoundingClientRect().right-document.getElementById
+    ('network').getBoundingClientRect().left)
+    height = +(document.getElementById('network').getBoundingClientRect().bottom-document.getElementById
+    ('network').getBoundingClientRect().top)
 
   //Changes the force location when the window is resized.
   window.addEventListener('resize', function(){
-  width = this.window.innerWidth;
-  height = this.window.innerHeight;
+    width = +(document.getElementById('network').getBoundingClientRect().right-document.getElementById
+    ('network').getBoundingClientRect().left)
+    height = +(document.getElementById('network').getBoundingClientRect().bottom-document.getElementById
+    ('network').getBoundingClientRect().top)
   simulation.force('x',d3.forceX(width/2).strength(0.1))
   .force('y',d3.forceY(height/2).strength(0.1));
-  simulation.restart();
+  simulation.alpha(0.3).restart();
 })
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 var simulation = d3.forceSimulation()
@@ -75,14 +79,22 @@ function ticked() {
       .attr("y2", function(d) { return d.target.y; });
   node
       .attr("cx", function(d) { 
-        if(d.x < 0){
-          return 0; 
-        }else if(d.x > screen.width){
-          return screen.width;
+        if(d.x < 8){
+          return 8; 
+        }else if(d.x > width-8){
+          return width-8;
         }
         return d.x; 
       })
-      .attr("cy", function(d) { return d.y; });
+      .attr("cy", function(d) {
+        if(d.y < 8){
+          return 8; 
+        }else if(d.y > height-8){
+          return height-8;
+        }
+        return d.y;
+      
+      });
 }
 
 function dragstarted(d) {
