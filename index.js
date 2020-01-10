@@ -6,9 +6,9 @@ var graph = {
 var nodeId = 1;
 var svg = d3.select("svg"),
   width = +(document.getElementById('network').getBoundingClientRect().right - document.getElementById
-    ('network').getBoundingClientRect().left)
-height = +(document.getElementById('network').getBoundingClientRect().bottom - document.getElementById
-  ('network').getBoundingClientRect().top)
+    ('network').getBoundingClientRect().left),
+  height = +(document.getElementById('network').getBoundingClientRect().bottom - document.getElementById
+    ('network').getBoundingClientRect().top)
 
 //Changes the force location when the window is resized.
 window.addEventListener('resize', function () {
@@ -19,6 +19,22 @@ window.addEventListener('resize', function () {
   simulation.force('x', d3.forceX(width / 2).strength(0.1))
     .force('y', d3.forceY(height / 2).strength(0.1));
   simulation.alpha(0.3).restart();
+})
+
+//add click event listener
+document.addEventListener('click', function () {
+  var X = event.clientX,
+    Y = event.clientY,
+    leftNetwork = document.getElementById('network').getBoundingClientRect().left,
+    rightNetwork = document.getElementById('network').getBoundingClientRect().right,
+    topNetwork = document.getElementById('network').getBoundingClientRect().top,
+    bottomNetwork = document.getElementById('network').getBoundingClientRect().bottom,
+    mode = document.getElementById('mode').innerHTML;
+  if(X > leftNetwork && X < rightNetwork && Y > topNetwork && Y < bottomNetwork && mode == "Add Nodes"){
+    addNode();
+  }
+
+
 })
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 var simulation = d3.forceSimulation()
@@ -139,4 +155,14 @@ function updateData() {
     links.push(link);
   }
   document.getElementById('link-list').innerHTML = JSON.stringify(links);
+}
+
+function clearData(){
+  graph.nodes = [];
+  node = node.data(graph.nodes);
+  node.exit().remove();
+  graph.links = [];
+  link = link.data(graph.links);
+  link.exit().remove();
+  updateData();
 }
