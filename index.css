@@ -5,12 +5,23 @@
 }
 
 #network{
-  width: 65vw;
+  width: 65%;
   height: 83vh;
   float: left;
   background-color: #ddd;
   outline: 0.5vw solid #87ceeb;
   margin: 1vw;
+}
+
+#data{
+  width: 31.5%;
+  height: 83vh;
+  float: left;
+  margin: 1vw 0.5vw;
+  background-color: #ddd;
+  outline: 0.5vw solid #87ceeb;
+  color: #003366;
+  font-size: 3vw;
 }
 
 #heading{

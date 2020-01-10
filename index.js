@@ -70,6 +70,7 @@ simulation
     .on("tick", ticked);
 simulation.force("link")
     .links(graph.links);
+updateData();
 
 function ticked() {
   link
@@ -114,12 +115,9 @@ function dragended(d) {
 
 function addNode(){ 
   graph.nodes.push({'id':'Test', 'group':1});
-  link
-  .data(graph.links)
-  .enter().append("line")
-    .attr("stroke-width", 3);
-  node
-  .data(graph.nodes)
+  node = node.data(graph.nodes);
+  node.exit().remove();
+  node = node
   .enter().append("circle")
     .attr("r", 8)
     .attr("fill", function(d) { return color(d.group); })
@@ -135,16 +133,16 @@ function addNode(){
     .call(d3.drag()
         .on("start", dragstarted)
         .on("drag", dragged)
-        .on("end", dragended));
-    
-node.append("title")
-    .text(function(d) { return d.id; });
-simulation
-    .nodes(graph.nodes)
-    .on("tick", ticked);
-simulation.force("link")
-    .links(graph.links);
-simulation.alpha(1).restart();
+        .on("end", dragended))
+    .merge(node);
+  node.append("title")
+      .text(function(d) { return d.id; });
+  simulation
+      .nodes(graph.nodes)
+  simulation.force("link")
+      .links(graph.links);
+  simulation.alpha(1).restart();
+  updateData();
 }
 
 function changeMode(clicked){
@@ -157,4 +155,9 @@ function changeAlgorithm(clicked){
 
 function changeSpeed(clicked){
   document.getElementById('speed').innerHTML = clicked.innerHTML;
+}
+
+function updateData(){
+  document.getElementById('num-nodes').innerHTML = "Number of Nodes: " + graph.nodes.length;
+  document.getElementById('link-list').innerHTML = JSON.stringify(graph.links);
 }
