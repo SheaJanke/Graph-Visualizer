@@ -95,18 +95,24 @@ function ticked() {
 }
 
 function dragstarted(d) {
-  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-  d.fx = d.x;
-  d.fy = d.y;
+  if(document.getElementById('mode').innerHTML != "Add Links"){
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
 }
 function dragged(d) {
-  d.fx = d3.event.x;
-  d.fy = d3.event.y;
+  if(document.getElementById('mode').innerHTML != "Add Links"){
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+  }
 }
 function dragended(d) {
-  if (!d3.event.active) simulation.alphaTarget(0);
-  d.fx = null;
-  d.fy = null;
+  if(document.getElementById('mode').innerHTML != "Add Links"){
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
 }
 
 function addNode() {
@@ -135,6 +141,11 @@ function addNode() {
 
 function changeMode(clicked) {
   document.getElementById('mode').innerHTML = clicked.innerHTML;
+  if(clicked.innerHTML == "Add Links"){
+    simulation.stop();
+  }else{
+    simulation.alpha(1).restart();
+  }
 }
 
 function changeAlgorithm(clicked) {
