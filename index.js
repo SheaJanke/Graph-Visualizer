@@ -1,6 +1,5 @@
 var graph = {
   "nodes": [],
-
   "links": []
 }
 var nodeId = 1;
@@ -30,7 +29,7 @@ document.addEventListener('click', function () {
     topNetwork = document.getElementById('network').getBoundingClientRect().top,
     bottomNetwork = document.getElementById('network').getBoundingClientRect().bottom,
     mode = document.getElementById('mode').innerHTML;
-  if(X > leftNetwork && X < rightNetwork && Y > topNetwork && Y < bottomNetwork && mode == "Add Nodes"){
+  if (X > leftNetwork && X < rightNetwork && Y > topNetwork && Y < bottomNetwork && mode == "Add Nodes") {
     addNode();
   }
 
@@ -95,23 +94,38 @@ function ticked() {
 }
 
 function dragstarted(d) {
-  if(document.getElementById('mode').innerHTML != "Add Links"){
+  if (document.getElementById('mode').innerHTML != "Add Links") {
     if (!d3.event.active) simulation.alphaTarget(0.3).restart();
     d.fx = d.x;
     d.fy = d.y;
+  } else {
+    graph.links.push({ source: d.id, target: graph.nodes[0].id });
+    link = link.data(graph.links);
+    link.exit().remove();
+    link = link
+      .enter().append("line")
+      .attr("stroke-width", 3)
+      .merge(link);
+    simulation.force("link")
+      .links(graph.links);
+    simulation.alpha(1).restart();
   }
 }
 function dragged(d) {
-  if(document.getElementById('mode').innerHTML != "Add Links"){
+  if (document.getElementById('mode').innerHTML != "Add Links") {
     d.fx = d3.event.x;
     d.fy = d3.event.y;
+  } else {
+
   }
 }
 function dragended(d) {
-  if(document.getElementById('mode').innerHTML != "Add Links"){
+  if (document.getElementById('mode').innerHTML != "Add Links") {
     if (!d3.event.active) simulation.alphaTarget(0);
     d.fx = null;
     d.fy = null;
+  } else {
+
   }
 }
 
@@ -141,9 +155,9 @@ function addNode() {
 
 function changeMode(clicked) {
   document.getElementById('mode').innerHTML = clicked.innerHTML;
-  if(clicked.innerHTML == "Add Links"){
+  if (clicked.innerHTML == "Add Links") {
     simulation.stop();
-  }else{
+  } else {
     simulation.alpha(1).restart();
   }
 }
@@ -168,7 +182,7 @@ function updateData() {
   document.getElementById('link-list').innerHTML = JSON.stringify(links);
 }
 
-function clearData(){
+function clearData() {
   graph.nodes = [];
   node = node.data(graph.nodes);
   node.exit().remove();
