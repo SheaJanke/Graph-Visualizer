@@ -2,6 +2,7 @@ var graph = {
   "nodes": [],
   "links": []
 }
+var draggedNode = -1;
 var nodeId = 1;
 var svg = d3.select("svg"),
   width = +(document.getElementById('network').getBoundingClientRect().right - document.getElementById
@@ -99,16 +100,7 @@ function dragstarted(d) {
     d.fx = d.x;
     d.fy = d.y;
   } else {
-    graph.links.push({ source: d.id, target: graph.nodes[0].id });
-    link = link.data(graph.links);
-    link.exit().remove();
-    link = link
-      .enter().append("line")
-      .attr("stroke-width", 3)
-      .merge(link);
-    simulation.force("link")
-      .links(graph.links);
-    simulation.alpha(1).restart();
+    draggedNode = d.id;
   }
 }
 function dragged(d) {
@@ -116,7 +108,7 @@ function dragged(d) {
     d.fx = d3.event.x;
     d.fy = d3.event.y;
   } else {
-
+    
   }
 }
 function dragended(d) {
@@ -125,7 +117,26 @@ function dragended(d) {
     d.fx = null;
     d.fy = null;
   } else {
-
+    var X = event.clientX,
+    Y = event.clientY,
+    leftNetwork = document.getElementById('network').getBoundingClientRect().left,
+    topNetwork = document.getElementById('network').getBoundingClientRect().top;
+    for(a = 0; a < graph.nodes.length; a++){
+      var currentNode = graph.nodes[a];
+      if(Math.pow(X-leftNetwork-currentNode.x,2) + Math.pow(Y-topNetwork-currentNode.y,2) < 64 && currentNode.id != draggedNode){
+        graph.links.push({ source: draggedNode, target: currentNode.id});
+        currentNode.group = graph.nodes[draggedNode-1]
+        link = link.data(graph.links);
+        link.exit().remove();
+        link = link
+          .enter().append("line")
+          .attr("stroke-width", 3)
+          .merge(link);
+        simulation.force("link")
+          .links(graph.links);
+        simulation.alpha(1).restart();
+      }
+    }
   }
 }
 
