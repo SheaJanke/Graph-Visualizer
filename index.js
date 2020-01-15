@@ -2,6 +2,7 @@ var graph = {
   "nodes": [],
   "links": []
 }
+var linkDictionary = {}
 var draggedNode = -1;
 var nodeId = 1;
 var svg = d3.select("svg"),
@@ -100,7 +101,7 @@ function dragstarted(d) {
     d.fx = d.x;
     d.fy = d.y;
   } else {
-    draggedNode = d.id;
+    draggedNode = d;
   }
 }
 function dragged(d) {
@@ -123,9 +124,9 @@ function dragended(d) {
     topNetwork = document.getElementById('network').getBoundingClientRect().top;
     for(a = 0; a < graph.nodes.length; a++){
       var currentNode = graph.nodes[a];
-      if(Math.pow(X-leftNetwork-currentNode.x,2) + Math.pow(Y-topNetwork-currentNode.y,2) < 64 && currentNode.id != draggedNode){
-        graph.links.push({ source: draggedNode, target: currentNode.id});
-        currentNode.group = graph.nodes[draggedNode-1]
+      if(Math.pow(X-leftNetwork-currentNode.x,2) + Math.pow(Y-topNetwork-currentNode.y,2) < 64 && currentNode.id != draggedNode.id){
+        graph.links.push({ source: draggedNode.id, target: currentNode.id});
+        currentNode.group = graph.nodes[draggedNode.id-1]
         link = link.data(graph.links);
         link.exit().remove();
         link = link
@@ -135,13 +136,28 @@ function dragended(d) {
         simulation.force("link")
           .links(graph.links);
         simulation.alpha(1).restart();
+        updateData();
+        if(draggedNode.id in linkDictionary){
+          if(!linkDictionary[draggedNode.id].includes(currentNode.id)){
+            linkDictionary[draggedNode.id].push(currentNode.id);
+          }
+        }else{
+          linkDictionary[draggedNode.id] = [currentNode.id];
+        }
+        if(currentNode.id in linkDictionary){
+          if(!linkDictionary[currentNode.id].includes(draggedNode.id)){
+            linkDictionary[currentNode.id].push(draggedNode.id);
+          }
+        }else{
+          linkDictionary[currentNode.id] = [draggedNode.id];
+        }
       }
     }
   }
 }
 
 function addNode() {
-  graph.nodes.push({ 'id': nodeId, 'group': nodeId });
+  graph.nodes.push({'id': nodeId, 'group': nodeId });
   nodeId++;
   node = node.data(graph.nodes);
   node.exit().remove();
