@@ -109,7 +109,7 @@ function dragged(d) {
     d.fx = d3.event.x;
     d.fy = d3.event.y;
   } else {
-    
+
   }
 }
 function dragended(d) {
@@ -119,37 +119,39 @@ function dragended(d) {
     d.fy = null;
   } else {
     var X = event.clientX,
-    Y = event.clientY,
-    leftNetwork = document.getElementById('network').getBoundingClientRect().left,
-    topNetwork = document.getElementById('network').getBoundingClientRect().top;
-    for(a = 0; a < graph.nodes.length; a++){
+      Y = event.clientY,
+      leftNetwork = document.getElementById('network').getBoundingClientRect().left,
+      topNetwork = document.getElementById('network').getBoundingClientRect().top;
+    for (a = 0; a < graph.nodes.length; a++) {
       var currentNode = graph.nodes[a];
-      if(Math.pow(X-leftNetwork-currentNode.x,2) + Math.pow(Y-topNetwork-currentNode.y,2) < 64 && currentNode.id != draggedNode.id){
-        graph.links.push({ source: draggedNode.id, target: currentNode.id});
-        currentNode.group = graph.nodes[draggedNode.id-1]
-        link = link.data(graph.links);
-        link.exit().remove();
-        link = link
-          .enter().append("line")
-          .attr("stroke-width", 3)
-          .merge(link);
-        simulation.force("link")
-          .links(graph.links);
-        simulation.alpha(1).restart();
-        updateData();
-        if(draggedNode.id in linkDictionary){
-          if(!linkDictionary[draggedNode.id].includes(currentNode.id)){
-            linkDictionary[draggedNode.id].push(currentNode.id);
+      if (Math.pow(X - leftNetwork - currentNode.x, 2) + Math.pow(Y - topNetwork - currentNode.y, 2) < 64 && currentNode.id != draggedNode.id) {
+        if (!(draggedNode.id in linkDictionary && linkDictionary[draggedNode.id].includes(currentNode.id))) {
+          graph.links.push({ source: draggedNode.id, target: currentNode.id });
+          currentNode.group = graph.nodes[draggedNode.id - 1]
+          link = link.data(graph.links);
+          link.exit().remove();
+          link = link
+            .enter().append("line")
+            .attr("stroke-width", 3)
+            .merge(link);
+          simulation.force("link")
+            .links(graph.links);
+          simulation.alpha(1).restart();
+          updateData();
+          if (draggedNode.id in linkDictionary) {
+            if (!linkDictionary[draggedNode.id].includes(currentNode.id)) {
+              linkDictionary[draggedNode.id].push(currentNode.id);
+            }
+          } else {
+            linkDictionary[draggedNode.id] = [currentNode.id];
           }
-        }else{
-          linkDictionary[draggedNode.id] = [currentNode.id];
-        }
-        if(currentNode.id in linkDictionary){
-          if(!linkDictionary[currentNode.id].includes(draggedNode.id)){
-            linkDictionary[currentNode.id].push(draggedNode.id);
+          if (currentNode.id in linkDictionary) {
+            if (!linkDictionary[currentNode.id].includes(draggedNode.id)) {
+              linkDictionary[currentNode.id].push(draggedNode.id);
+            }
+          } else {
+            linkDictionary[currentNode.id] = [draggedNode.id];
           }
-        }else{
-          linkDictionary[currentNode.id] = [draggedNode.id];
         }
       }
     }
@@ -157,7 +159,7 @@ function dragended(d) {
 }
 
 function addNode() {
-  graph.nodes.push({'id': nodeId, 'group': nodeId });
+  graph.nodes.push({ 'id': nodeId, 'group': nodeId });
   nodeId++;
   node = node.data(graph.nodes);
   node.exit().remove();
@@ -170,7 +172,7 @@ function addNode() {
       .on("drag", dragged)
       .on("end", dragended))
     .merge(node)
-  node.append('title')
+    node.append('title')
     .text(function (d) { return d.id; });
   simulation
     .nodes(graph.nodes)
